@@ -1,5 +1,7 @@
 # step03 clean data
 
+## drafted by Nathan Alexander
+
 # install packages
 install.packages("tidyverse")
 install.packages("tidyr")
@@ -10,7 +12,7 @@ library(dplyr)
 library(tidyr)
 
 # import processed data
-df <- read.csv("data/fatal_raw_02.csv") %>% 
+df <- read.csv("data/fatalv2_02.csv") %>% 
   select(-X, -X.1) %>% 
   as_tibble()
 df
@@ -18,11 +20,16 @@ df
 # check for missing values
 sapply(df, function(x) sum(is.na(x))) # get a count of missing values
 
-# drop missing values
-df %>% 
-  drop_na() -> df
 
-# check for missing values; take note of what was dropped; check state.name
+# imput missing values
+df.impute <- df %>% 
+
+
+# drop missing values
+df.drop <- df %>% 
+  drop_na()
+
+# check for missing values
 sapply(df, function(x) sum(is.na(x))) # get a count of missing values
 
 ## write a csv file

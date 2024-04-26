@@ -19,17 +19,64 @@ library(tidyr)
 library(stringr)
 library(survey)
 library(srvyr)
+library(ggplot2)
 
-### Poverty by tract
+# read in cleaned data
+fatal <- read.csv("data/fatal_clean.csv")
+
+# census poverty rate by state (2022)
+pov2022 <- read.csv("data/poverty/SAIPE_03-18-2024.csv")
+pov2022
+
+statepov22 <- pov2022 %>% 
+  select(Name, Percent.in.Poverty) %>% 
+  mutate(povper = Percent.in.Poverty) %>% 
+  as_tibble()
+
+statepov22
+statepov22 %>% 
+  ggplot(aes(x = povper, y = reorder(Name, povper))) +
+  geom_point() + 
+  xlab(Poverty Rate) + ylab(State)
+  labs(title = "Poverty Rates by US State", subtitle = "2022", caption = "Based on US Decennial Census Data")
+
+# fips codes
+fips_codes
+
 #### gist code modified from ehbick01 @ https://gist.github.com/ehbick01/1746d6ef2e9d5f74d0a80b83b75b2a45
-library(purrr)
+library(purrr) 
 
 # state FIPS codes
 fips_codes
 us <- unique(fips_codes$state)[1:51]
-ga <- filter(fips_codes, state == "GA") # county codes for GA
-nc <- filter(fips_codes, state == "NC") # county codes for NC
+head(us)
+tail(us)
 
+ga <- filter(fips_codes, state == "GA") # county codes for GA
+head(ga)
+tail(ga)
+
+nc <- filter(fips_codes, state == "NC") # county codes for NC
+head(nc)
+tail(nc)
+
+
+
+
+
+# median age by state
+age2020 <- get_decennial(geography = "state",
+                         variables = "P13_001N",
+                         year = 2020,
+                         sumfile = "dhc")
+age2020
+head(age2020)
+tail(age2020)
+
+
+age2020 %>% 
+  ggplot(aes(x = value, y = reorder(NAME, value))) + 
+  geom_point()
 
 # tract-level population 
 totalpop <- map_df(us, function(x) {
@@ -39,7 +86,7 @@ totalpop <- map_df(us, function(x) {
 })
 
 totalpop
-tail(totalpop)
+
 
 # tract-level population for GA
 totalpop_ga <- map_df(us, function(x) {
@@ -144,7 +191,7 @@ for (i in 2013:2021){
   print(i)
 }
 
-yearz = labels(for (i in 2013:2021){
+years = labels(for (i in 2013:2021){
   print(i)
 })
-yearz
+years

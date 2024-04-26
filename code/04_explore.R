@@ -1,4 +1,4 @@
-# step04_02 exploratory data analysis - by race
+# step04 explore data
 
 # install packages
 install.packages("tidyverse")
@@ -12,6 +12,11 @@ library(tidyr)
 library(ggplot2)
 
 ## load cleaned data
-df <- read.csv("data/fatal_clean.csv")
+fatal <- read.csv("data/fatal_clean.csv")
+
+# counts of fatal interactions by year
+fatal %>% 
+  count(year)
 
 
+        
